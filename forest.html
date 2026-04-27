@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Forest — Muhib & Sara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --moss:       #1a2416;
+  --deep:       #0d1410;
+  --bark:       #2c1f14;
+  --bark-light: #3d2b1a;
+  --fog:        #8da898;
+  --mist:       rgba(180,200,185,0.18);
+  --leaf:       #2d4a2a;
+  --sage:       #6b8f6b;
+  --cream:      #e8dfc8;
+  --amber:      #c8934a;
+  --amber-glow: rgba(200,147,74,0.25);
+  --rain-col:   rgba(160,190,170,0.35);
+  --white-soft: rgba(232,223,200,0.88);
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-fell:  'IM Fell English', serif;
+  --font-hand:  'Caveat', cursive;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--deep);
+  color:var(--cream);
+  font-family:var(--font-serif);
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ══════════════════════════════════════
+   RAIN CANVAS — fixed overlay
+══════════════════════════════════════ */
+#rainCanvas{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:998;
+  opacity:0.55;
+}
+
+/* ══════════════════════════════════════
+   MIST LAYER
+══════════════════════════════════════ */
+.mist-layer{
+  position:fixed;bottom:0;left:0;
+  width:100%;height:35vh;
+  background:linear-gradient(to top,rgba(20,35,22,0.7) 0%,transparent 100%);
+  pointer-events:none;
+  z-index:997;
+  animation:mistDrift 8s ease-in-out infinite alternate;
+}
+@keyframes mistDrift{
+  0%{opacity:0.6;transform:translateX(-10px)}
+  100%{opacity:0.9;transform:translateX(10px)}
+}
+
+/* ══════════════════════════════════════
+   SECTION BASE
+══════════════════════════════════════ */
+section{
+  position:relative;
+  overflow:hidden;
+}
+
+/* ══════════════════════════════════════
+   SECTION 1 — THE ARRIVAL
+══════════════════════════════════════ */
+#arrival{
+  width:100%;height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:2rem;
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(45,74,42,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 30%, rgba(13,20,16,0.8) 0%, transparent 60%),
+    linear-gradient(180deg,#0d1410 0%,#121c10 40%,#0f1a0d 100%);
+}
+
+/* Forest silhouette */
+#treeSVG{
+  position:absolute;bottom:0;left:0;width:100%;
+  pointer-events:none;opacity:0.85;
+}
+
+.arrival-tagline{
+  font-family:var(--font-hand);
+  font-size:clamp(0.85rem,2vw,1.1rem);
+  color:var(--sage);
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  opacity:0;
+  animation:fadeInSoft 1.4s ease-in-out 0.5s forwards;
+  position:relative;z-index:2;
+}
+
+.arrival-title{
+  font-family:var(--font-fell);
+  font-size:clamp(2.8rem,8vw,6.5rem);
+  font-style:italic;
+  line-height:1.05;
+  text-align:center;
+  color:var(--cream);
+  text-shadow:0 0 80px rgba(200,147,74,0.2), 0 4px 40px rgba(0,0,0,0.8);
+  opacity:0;
+  animation:fadeInSoft 1.8s ease-in-out 1s forwards;
+  position:relative;z-index:2;
+  max-width:800px;padding:0 1.5rem;
+}
+
+.arrival-sub{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-size:clamp(1rem,2.2vw,1.35rem);
+  color:var(--fog);
+  font-weight:300;
+  letter-spacing:0.05em;
+  text-align:center;
+  opacity:0;
+  animation:fadeInSoft 1.6s ease-in-out 1.8s forwards;
+  position:relative;z-index:2;
+  max-width:550px;padding:0 1.5rem;
+}
+
+.cabin-glow{
+  position:absolute;
+  bottom:18%;left:50%;transform:translateX(-50%);
+  width:180px;height:120px;
+  background:radial-gradient(ellipse, rgba(200,147,74,0.18) 0%, transparent 70%);
+  border-radius:50%;
+  animation:cabinPulse 3s ease-in-out infinite;
+  pointer-events:none;z-index:3;
+}
+@keyframes cabinPulse{
+  0%,100%{opacity:0.6;transform:translateX(-50%) scale(1)}
+  50%{opacity:1;transform:translateX(-50%) scale(1.15)}
+}
+
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  font-family:var(--font-hand);font-size:0.8rem;
+  color:var(--sage);letter-spacing:0.2em;text-transform:uppercase;
+  opacity:0;animation:fadeInSoft 1s ease-in-out 3s forwards;
+  z-index:10;cursor:pointer;
+}
+.scroll-hint span{
+  display:block;width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--sage),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{transform:scaleY(0);transform-origin:top}
+  50%{transform:scaleY(1);transform-origin:top}
+  51%{transform:scaleY(1);transform-origin:bottom}
+  100%{transform:scaleY(0);transform-origin:bottom}
+}
+
+@keyframes fadeInSoft{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ══════════════════════════════════════
+   SECTION 2 — THE CABIN
+══════════════════════════════════════ */
+#cabin{
+  padding:8rem 2rem;
+  background:linear-gradient(180deg,#0d1410 0%,#111910 30%,#0e1a0c 100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+#cabin::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 50%,rgba(200,147,74,0.06) 0%,transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+}
+
+.cabin-illustration{
+  width:clamp(280px,60vw,520px);
+  margin-bottom:4rem;
+  filter:drop-shadow(0 20px 60px rgba(0,0,0,0.7)) drop-shadow(0 0 40px rgba(200,147,74,0.12));
+  animation:cabinFloat 6s ease-in-out infinite;
+  position:relative;z-index:2;
+}
+@keyframes cabinFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+.section-label{
+  font-family:var(--font-hand);
+  font-size:0.9rem;color:var(--sage);
+  letter-spacing:0.28em;text-transform:uppercase;
+  margin-bottom:1rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.section-label.vis{opacity:1;transform:none}
+
+.section-heading{
+  font-family:var(--font-fell);
+  font-style:italic;
+  font-size:clamp(2rem,5vw,3.8rem);
+  color:var(--cream);
+  text-align:center;
+  line-height:1.2;
+  margin-bottom:1.2rem;
+  text-shadow:0 0 40px rgba(200,147,74,0.15);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s ease 0.15s,transform 0.8s ease 0.15s;
+}
+.section-heading.vis{opacity:1;transform:none}
+
+.prose{
+  font-family:var(--font-serif);
+  font-size:clamp(1rem,2vw,1.25rem);
+  font-weight:300;
+  font-style:italic;
+  color:var(--fog);
+  line-height:2;
+  text-align:center;
+  max-width:620px;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s ease 0.3s,transform 0.8s ease 0.3s;
+}
+.prose.vis{opacity:1;transform:none}
+
+.divider-leaf{
+  display:flex;align-items:center;gap:1.2rem;
+  margin:2.5rem 0;
+  opacity:0;transition:opacity 1s ease 0.4s;
+}
+.divider-leaf.vis{opacity:1}
+.divider-leaf::before,.divider-leaf::after{
+  content:'';flex:1;max-width:160px;height:1px;
+  background:linear-gradient(to right,transparent,rgba(107,143,107,0.4));
+}
+.divider-leaf::after{background:linear-gradient(to left,transparent,rgba(107,143,107,0.4))}
+.divider-leaf span{color:var(--sage);font-size:1.1rem}
+
+/* ══════════════════════════════════════
+   SECTION 3 — THE RAIN
+══════════════════════════════════════ */
+#rain-section{
+  padding:8rem 2rem;
+  background:linear-gradient(180deg,#0e1a0c 0%,#0c1810 50%,#0a160e 100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+#rain-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 40% 60%,rgba(30,60,35,0.3) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+/* Animated rain window */
+.window-frame{
+  position:relative;
+  width:clamp(280px,55vw,500px);
+  aspect-ratio:3/4;
+  border:3px solid var(--bark-light);
+  border-radius:4px 4px 0 0;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 8px var(--bark),
+    0 0 0 10px var(--bark-light),
+    0 30px 80px rgba(0,0,0,0.8),
+    inset 0 0 60px rgba(0,0,0,0.4),
+    0 0 80px rgba(200,147,74,0.08);
+  margin-bottom:4rem;
+  flex-shrink:0;
+}
+
+.window-scene{
+  width:100%;height:100%;
+  background:linear-gradient(180deg,
+    #0a1a0c 0%,
+    #0d2010 30%,
+    #0b1c0e 60%,
+    #091508 100%);
+  position:relative;
+  overflow:hidden;
+}
+
+/* Forest layers inside window */
+.forest-bg{
+  position:absolute;bottom:0;left:0;width:100%;
+  opacity:0.7;
+}
+.forest-mid{
+  position:absolute;bottom:0;left:0;width:100%;
+  opacity:0.9;
+}
+.forest-fg{
+  position:absolute;bottom:0;left:0;width:100%;
+}
+
+/* Window rain canvas */
+#windowRain{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:5;
+}
+
+/* Window glow (cabin light from below) */
+.window-glow{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:80%;height:40%;
+  background:radial-gradient(ellipse,rgba(200,147,74,0.15) 0%,transparent 70%);
+  pointer-events:none;z-index:4;
+}
+
+/* Windowpane cross */
+.window-cross{
+  position:absolute;inset:0;
+  z-index:6;pointer-events:none;
+}
+.window-cross::before{
+  content:'';position:absolute;
+  top:0;bottom:0;left:50%;transform:translateX(-50%);
+  width:3px;background:var(--bark-light);
+}
+.window-cross::after{
+  content:'';position:absolute;
+  left:0;right:0;top:50%;transform:translateY(-50%);
+  height:3px;background:var(--bark-light);
+}
+
+/* Rain drops on glass */
+.glass-drop{
+  position:absolute;
+  width:2px;
+  background:linear-gradient(to bottom,rgba(160,190,170,0.6),transparent);
+  border-radius:0 0 50% 50%;
+  z-index:7;
+  animation:glassDrop linear infinite;
+}
+@keyframes glassDrop{
+  0%{top:-10%;opacity:0.7}
+  100%{top:110%;opacity:0.2}
+}
+
+/* Window reflection fog */
+.window-fog{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 80%,rgba(140,180,150,0.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 20%,rgba(100,140,110,0.03) 0%,transparent 40%);
+  z-index:8;pointer-events:none;
+}
+
+/* ══════════════════════════════════════
+   SECTION 4 — LOVE NOTES (cards)
+══════════════════════════════════════ */
+#moments{
+  padding:8rem 2rem;
+  background:linear-gradient(180deg,#0a160e 0%,#0d1a0b 100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+#moments::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 60% 40%,rgba(45,74,42,0.25) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.6rem;
+  max-width:1000px;
+  width:100%;
+  margin-top:1rem;
+}
+
+.moment-card{
+  background:linear-gradient(135deg,rgba(30,45,28,0.8),rgba(15,25,14,0.9));
+  border:1px solid rgba(107,143,107,0.2);
+  border-radius:6px;
+  padding:2.2rem 2rem;
+  position:relative;
+  overflow:hidden;
+  transition:transform 0.5s ease,box-shadow 0.5s ease,border-color 0.5s ease;
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease,box-shadow 0.4s ease,border-color 0.4s ease;
+}
+.moment-card.vis{opacity:1;transform:translateY(0)}
+.moment-card:hover{
+  transform:translateY(-6px) !important;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 30px rgba(200,147,74,0.08);
+  border-color:rgba(107,143,107,0.45);
+}
+.moment-card::before{
+  content:'';position:absolute;
+  top:0;left:0;width:3px;height:100%;
+  background:linear-gradient(to bottom,var(--sage),transparent);
+  opacity:0.6;
+}
+.moment-card::after{
+  content:'';position:absolute;
+  top:-50%;right:-50%;
+  width:100%;height:100%;
+  background:radial-gradient(circle,rgba(200,147,74,0.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.card-icon{
+  font-size:1.8rem;margin-bottom:1rem;display:block;
+  filter:drop-shadow(0 0 8px rgba(200,147,74,0.4));
+}
+.card-title{
+  font-family:var(--font-fell);
+  font-style:italic;
+  font-size:1.3rem;
+  color:var(--cream);
+  margin-bottom:0.8rem;
+  line-height:1.3;
+}
+.card-body{
+  font-family:var(--font-serif);
+  font-size:0.95rem;
+  font-weight:300;
+  color:var(--fog);
+  line-height:1.9;
+}
+
+/* ══════════════════════════════════════
+   SECTION 5 — THE FIREPLACE
+══════════════════════════════════════ */
+#fireplace{
+  padding:8rem 2rem;
+  background:linear-gradient(180deg,#0d1a0b 0%,#100d08 50%,#0e0c07 100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+#fireplace::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 80%,rgba(200,147,74,0.12) 0%,transparent 55%);
+  pointer-events:none;
+  animation:fireSwell 4s ease-in-out infinite;
+}
+@keyframes fireSwell{
+  0%,100%{opacity:0.6}50%{opacity:1}
+}
+
+.fire-svg-wrap{
+  width:clamp(200px,40vw,340px);
+  margin-bottom:3rem;
+  position:relative;z-index:2;
+  filter:drop-shadow(0 0 40px rgba(200,100,30,0.4));
+}
+
+/* ══════════════════════════════════════
+   SECTION 6 — THE PROMISE
+══════════════════════════════════════ */
+#promise{
+  padding:10rem 2rem 8rem;
+  background:linear-gradient(180deg,#0e0c07 0%,#0c1008 50%,#0d1410 100%);
+  display:flex;flex-direction:column;align-items:center;
+}
+#promise::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 50%,rgba(30,55,28,0.3) 0%,transparent 55%),
+    radial-gradient(ellipse at 70% 60%,rgba(200,147,74,0.06) 0%,transparent 50%);
+  pointer-events:none;
+}
+
+.promise-text{
+  font-family:var(--font-fell);
+  font-style:italic;
+  font-size:clamp(1.6rem,4.5vw,3.2rem);
+  color:var(--cream);
+  text-align:center;
+  max-width:700px;
+  line-height:1.6;
+  text-shadow:0 0 60px rgba(200,147,74,0.15);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 1s ease,transform 1s ease;
+}
+.promise-text.vis{opacity:1;transform:none}
+
+.promise-names{
+  font-family:var(--font-hand);
+  font-size:clamp(1.4rem,3.5vw,2.4rem);
+  color:var(--amber);
+  margin-top:1.8rem;
+  letter-spacing:0.12em;
+  text-shadow:0 0 30px rgba(200,147,74,0.4);
+  opacity:0;transform:translateY(16px);
+  transition:opacity 1s ease 0.3s,transform 1s ease 0.3s;
+}
+.promise-names.vis{opacity:1;transform:none}
+
+.rain-sound-note{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-size:clamp(0.9rem,2vw,1.1rem);
+  color:var(--sage);
+  margin-top:3.5rem;
+  text-align:center;
+  max-width:480px;
+  line-height:2;
+  opacity:0;transition:opacity 1s ease 0.5s;
+}
+.rain-sound-note.vis{opacity:0.8}
+
+/* ══════════════════════════════════════
+   GLOBAL HELPERS
+══════════════════════════════════════ */
+.center{text-align:center;position:relative;z-index:2}
+.z2{position:relative;z-index:2}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:600px){
+  .window-frame{width:90vw}
+  .cards-grid{grid-template-columns:1fr}
+  .arrival-title{font-size:2.6rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Fixed rain -->
+<canvas id="rainCanvas"></canvas>
+<div class="mist-layer"></div>
+
+<!-- ══════════════════════════════════════
+     SECTION 1 — THE ARRIVAL
+══════════════════════════════════════ -->
+<section id="arrival">
+
+  <!-- Forest silhouette SVG -->
+  <svg id="treeSVG" viewBox="0 0 1440 340" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+    <!-- Far background trees -->
+    <g opacity="0.35" fill="#1a2a18">
+      <polygon points="120,340 160,180 200,340"/>
+      <polygon points="200,340 250,140 300,340"/>
+      <polygon points="280,340 330,160 380,340"/>
+      <polygon points="1060,340 1110,150 1160,340"/>
+      <polygon points="1150,340 1200,170 1250,340"/>
+      <polygon points="1240,340 1285,140 1330,340"/>
+    </g>
+    <!-- Mid trees -->
+    <g opacity="0.6" fill="#162414">
+      <polygon points="0,340 50,200 100,340"/>
+      <polygon points="60,340 120,150 180,340"/>
+      <polygon points="150,340 220,120 290,340"/>
+      <polygon points="260,340 340,140 420,340"/>
+      <polygon points="350,340 420,180 490,340"/>
+      <!-- cabin shape -->
+      <rect x="640" y="250" width="160" height="90" fill="#1e1208"/>
+      <polygon points="620,255 720,195 820,255" fill="#251710"/>
+      <!-- cabin window glow -->
+      <rect x="672" y="268" width="38" height="28" rx="2" fill="rgba(200,147,74,0.55)"/>
+      <rect x="730" y="268" width="38" height="28" rx="2" fill="rgba(200,147,74,0.45)"/>
+      <!-- chimney -->
+      <rect x="740" y="195" width="16" height="35" fill="#1e1208"/>
+      <!-- smoke -->
+      <ellipse cx="748" cy="185" rx="8" ry="12" fill="rgba(180,180,170,0.15)" style="animation:smokeRise 3s ease-in-out infinite"/>
+      <ellipse cx="752" cy="165" rx="12" ry="16" fill="rgba(160,160,150,0.1)" style="animation:smokeRise 3s ease-in-out 0.6s infinite"/>
+
+      <polygon points="900,340 980,150 1060,340"/>
+      <polygon points="1000,340 1080,130 1160,340"/>
+      <polygon points="1100,340 1190,160 1280,340"/>
+      <polygon points="1200,340 1290,145 1380,340"/>
+      <polygon points="1300,340 1380,170 1440,340"/>
+    </g>
+    <!-- Foreground dark trees -->
+    <g opacity="0.9" fill="#0d1a0b">
+      <polygon points="-10,340 60,160 130,340"/>
+      <polygon points="80,340 170,100 260,340"/>
+      <polygon points="1180,340 1270,110 1360,340"/>
+      <polygon points="1310,340 1390,155 1450,340"/>
+    </g>
+    <!-- Ground fog -->
+    <rect x="0" y="300" width="1440" height="40" fill="url(#fogGrad)" opacity="0.8"/>
+    <defs>
+      <linearGradient id="fogGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(140,180,150,0.12)"/>
+        <stop offset="100%" stop-color="rgba(13,20,10,0.95)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="cabin-glow"></div>
+
+  <p class="arrival-tagline">Muhib &amp; Sara · A Dream We Carry</p>
+
+  <h1 class="arrival-title">Our Forest,<br>Our Home</h1>
+
+  <p class="arrival-sub">
+    Deep in the woods, where the rain never stops<br>
+    and no one else exists — just us.
+  </p>
+
+  <div class="scroll-hint" onclick="document.getElementById('cabin').scrollIntoView({behavior:'smooth'})">
+    enter
+    <span></span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 2 — THE CABIN
+══════════════════════════════════════ -->
+<section id="cabin">
+
+  <!-- SVG cabin illustration -->
+  <svg class="cabin-illustration z2" viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="winGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="rgba(200,147,74,0.7)"/>
+        <stop offset="100%" stop-color="rgba(200,147,74,0)"/>
+      </radialGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Ground -->
+    <ellipse cx="260" cy="345" rx="220" ry="20" fill="rgba(10,20,10,0.5)"/>
+    <!-- Forest bg -->
+    <polygon points="0,340 40,200 80,340" fill="#111d0f" opacity="0.7"/>
+    <polygon points="60,340 110,170 160,340" fill="#0d1a0c" opacity="0.8"/>
+    <polygon points="360,340 410,175 460,340" fill="#0d1a0c" opacity="0.8"/>
+    <polygon points="440,340 490,200 520,340" fill="#111d0f" opacity="0.7"/>
+    <!-- Cabin body -->
+    <rect x="140" y="220" width="240" height="120" rx="2" fill="#1e1208"/>
+    <!-- Log texture lines -->
+    <line x1="140" y1="240" x2="380" y2="240" stroke="#2c1f14" stroke-width="1.5" opacity="0.6"/>
+    <line x1="140" y1="260" x2="380" y2="260" stroke="#2c1f14" stroke-width="1.5" opacity="0.6"/>
+    <line x1="140" y1="280" x2="380" y2="280" stroke="#2c1f14" stroke-width="1.5" opacity="0.6"/>
+    <line x1="140" y1="300" x2="380" y2="300" stroke="#2c1f14" stroke-width="1.5" opacity="0.6"/>
+    <line x1="140" y1="320" x2="380" y2="320" stroke="#2c1f14" stroke-width="1.5" opacity="0.6"/>
+    <!-- Roof -->
+    <polygon points="120,222 260,140 400,222" fill="#251710"/>
+    <polygon points="120,222 260,140 400,222" fill="none" stroke="#3d2b1a" stroke-width="1.5"/>
+    <!-- Roof ridge -->
+    <line x1="260" y1="140" x2="260" y2="220" stroke="#3d2b1a" stroke-width="2" opacity="0.5"/>
+    <!-- Chimney -->
+    <rect x="292" y="140" width="22" height="50" fill="#1e1208"/>
+    <rect x="288" y="136" width="30" height="8" rx="1" fill="#2c1f14"/>
+    <!-- Smoke puffs -->
+    <circle cx="303" cy="122" r="9" fill="rgba(180,190,175,0.18)" style="animation:smokeUp 3s ease-in-out infinite"/>
+    <circle cx="307" cy="105" r="12" fill="rgba(160,175,160,0.12)" style="animation:smokeUp 3s ease-in-out 0.7s infinite"/>
+    <circle cx="300" cy="88" r="15" fill="rgba(140,160,145,0.08)" style="animation:smokeUp 3s ease-in-out 1.4s infinite"/>
+    <!-- Door -->
+    <rect x="236" y="270" width="48" height="70" rx="3 3 0 0" fill="#2c1f14"/>
+    <rect x="238" y="272" width="44" height="68" rx="2 2 0 0" fill="#1a1208"/>
+    <circle cx="278" cy="306" r="3" fill="#c8934a" filter="url(#glow)"/>
+    <!-- Windows with glow -->
+    <rect x="158" y="238" width="52" height="40" rx="2" fill="#0a0a06"/>
+    <rect x="160" y="240" width="48" height="36" rx="1" fill="url(#winGlow)" opacity="0.8"/>
+    <line x1="184" y1="240" x2="184" y2="276" stroke="#2c1f14" stroke-width="2"/>
+    <line x1="160" y1="258" x2="208" y2="258" stroke="#2c1f14" stroke-width="2"/>
+    <!-- glow halo left -->
+    <ellipse cx="184" cy="258" rx="35" ry="28" fill="rgba(200,147,74,0.1)" filter="url(#glow)"/>
+
+    <rect x="310" y="238" width="52" height="40" rx="2" fill="#0a0a06"/>
+    <rect x="312" y="240" width="48" height="36" rx="1" fill="url(#winGlow)" opacity="0.75"/>
+    <line x1="336" y1="240" x2="336" y2="276" stroke="#2c1f14" stroke-width="2"/>
+    <line x1="312" y1="258" x2="360" y2="258" stroke="#2c1f14" stroke-width="2"/>
+    <ellipse cx="336" cy="258" rx="35" ry="28" fill="rgba(200,147,74,0.1)" filter="url(#glow)"/>
+
+    <!-- Ground glow -->
+    <ellipse cx="260" cy="340" rx="180" ry="18" fill="rgba(200,147,74,0.06)" filter="url(#glow)"/>
+    <!-- Rain streaks on cabin -->
+    <g opacity="0.25" stroke="rgba(160,200,170,0.5)" stroke-width="1">
+      <line x1="170" y1="140" x2="165" y2="200"/>
+      <line x1="210" y1="145" x2="205" y2="210"/>
+      <line x1="310" y1="142" x2="305" y2="205"/>
+      <line x1="350" y1="147" x2="345" y2="208"/>
+    </g>
+  </svg>
+
+  <p class="section-label center" data-reveal>deep in the woods</p>
+  <h2 class="section-heading center" data-reveal>
+    A Cabin for Two
+  </h2>
+  <div class="divider-leaf center" data-reveal><span>🌿</span></div>
+  <p class="prose center" data-reveal>
+    Tucked between ancient trees where no road leads —<br>
+    just a wooden home, amber windows glowing warm,<br>
+    smoke curling up into the grey sky above.<br>
+    Ours. Only ours.
+  </p>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 3 — THE RAIN
+══════════════════════════════════════ -->
+<section id="rain-section">
+
+  <p class="section-label center" data-reveal>the sound we both love</p>
+  <h2 class="section-heading center" data-reveal>
+    It's Always Raining Here
+  </h2>
+  <div class="divider-leaf center" data-reveal><span>🌧️</span></div>
+  <p class="prose center" data-reveal>
+    The rain never stops in our forest.<br>
+    It drums softly on the roof, streaks the glass,<br>
+    fills the silence between us with something whole.
+  </p>
+
+  <!-- Rain window -->
+  <div class="window-frame z2" style="margin-top:3.5rem">
+    <div class="window-scene">
+      <!-- Forest inside window (background) -->
+      <svg class="forest-bg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <rect width="500" height="500" fill="#0a1a0c"/>
+        <g fill="#0d2010" opacity="0.7">
+          <polygon points="0,500 60,280 120,500"/>
+          <polygon points="80,500 160,240 240,500"/>
+          <polygon points="200,500 280,260 360,500"/>
+          <polygon points="320,500 400,250 480,500"/>
+          <polygon points="420,500 480,280 500,500"/>
+        </g>
+        <g fill="#091508" opacity="0.9">
+          <polygon points="0,500 50,300 100,500"/>
+          <polygon points="60,500 140,270 220,500"/>
+          <polygon points="180,500 260,255 340,500"/>
+          <polygon points="300,500 380,265 460,500"/>
+          <polygon points="400,500 460,290 500,500"/>
+        </g>
+        <!-- distant light between trees -->
+        <ellipse cx="250" cy="350" rx="60" ry="40" fill="rgba(200,147,74,0.05)"/>
+        <!-- Ground mist -->
+        <rect x="0" y="440" width="500" height="60" fill="rgba(120,160,130,0.08)"/>
+      </svg>
+
+      <svg class="forest-fg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+        <g fill="#040e04">
+          <polygon points="-10,500 70,240 150,500"/>
+          <polygon points="350,500 430,250 500,500"/>
+        </g>
+      </svg>
+
+      <canvas id="windowRain"></canvas>
+      <div class="window-glow"></div>
+      <div class="window-cross"></div>
+      <div class="window-fog"></div>
+
+      <!-- Glass drops (CSS animated) -->
+      <div class="glass-drop" style="left:12%;width:1.5px;height:45px;animation-duration:2.2s;animation-delay:0s"></div>
+      <div class="glass-drop" style="left:28%;width:2px;height:60px;animation-duration:1.8s;animation-delay:0.4s"></div>
+      <div class="glass-drop" style="left:45%;width:1px;height:35px;animation-duration:2.5s;animation-delay:0.8s"></div>
+      <div class="glass-drop" style="left:62%;width:1.5px;height:55px;animation-duration:2s;animation-delay:0.2s"></div>
+      <div class="glass-drop" style="left:78%;width:2px;height:40px;animation-duration:1.6s;animation-delay:1s"></div>
+      <div class="glass-drop" style="left:20%;width:1px;height:30px;animation-duration:3s;animation-delay:1.5s"></div>
+      <div class="glass-drop" style="left:55%;width:1.5px;height:50px;animation-duration:2.3s;animation-delay:0.6s"></div>
+      <div class="glass-drop" style="left:88%;width:1px;height:38px;animation-duration:1.9s;animation-delay:1.2s"></div>
+    </div>
+  </div>
+
+  <p class="prose center" data-reveal style="margin-top:2rem">
+    We sit by the window, watching drops race each other<br>
+    down the glass. Your head on my shoulder.<br>
+    Neither of us speaking. Both of us home.
+  </p>
+
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 4 — THE MOMENTS
+══════════════════════════════════════ -->
+<section id="moments">
+
+  <p class="section-label center" data-reveal>what life looks like there</p>
+  <h2 class="section-heading center" data-reveal>
+    Our Days in the Forest
+  </h2>
+  <div class="divider-leaf center" data-reveal><span>🍃</span></div>
+
+  <div class="cards-grid z2" style="margin-top:2rem">
+
+    <div class="moment-card" data-reveal-card style="transition-delay:0.0s">
+      <span class="card-icon">🌧️</span>
+      <div class="card-title">Waking up to Rain</div>
+      <div class="card-body">No alarm. Just the sound of rain on wood above us. We stay under the blanket until the world outside turns silver-grey and beautiful.</div>
+    </div>
+
+    <div class="moment-card" data-reveal-card style="transition-delay:0.12s">
+      <span class="card-icon">🔥</span>
+      <div class="card-title">The Morning Fire</div>
+      <div class="card-body">You wrap yourself in a shawl. I build the fire. The smell of wood smoke fills the cabin before either of us says a single word.</div>
+    </div>
+
+    <div class="moment-card" data-reveal-card style="transition-delay:0.24s">
+      <span class="card-icon">☕</span>
+      <div class="card-title">Tea by the Window</div>
+      <div class="card-body">Two mugs. Your hands warm around yours. We watch the forest breathe in the rain and feel no need to be anywhere else. Ever.</div>
+    </div>
+
+    <div class="moment-card" data-reveal-card style="transition-delay:0.36s">
+      <span class="card-icon">📖</span>
+      <div class="card-title">Reading & Silence</div>
+      <div class="card-body">You read. I watch you read. The rain fills every quiet moment. Neither of us needs to perform or explain. This silence is love.</div>
+    </div>
+
+    <div class="moment-card" data-reveal-card style="transition-delay:0.48s">
+      <span class="card-icon">🌲</span>
+      <div class="card-title">Walks in Wet Soil</div>
+      <div class="card-body">We walk under the trees even when it pours. Your hair damp, feet muddy, laughing. The forest smells like everything right in the world.</div>
+    </div>
+
+    <div class="moment-card" data-reveal-card style="transition-delay:0.6s">
+      <span class="card-icon">🌙</span>
+      <div class="card-title">Evenings with No Hurry</div>
+      <div class="card-body">Dinner cooked together. Candles. The dark outside so deep it's like we are the only two people who ever existed. It is enough. It is everything.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 5 — THE FIREPLACE
+══════════════════════════════════════ -->
+<section id="fireplace">
+
+  <!-- Animated fire SVG -->
+  <div class="fire-svg-wrap">
+    <svg viewBox="0 0 340 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="fireGlow" cx="50%" cy="80%" r="50%">
+          <stop offset="0%" stop-color="rgba(240,120,20,0.4)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+      <!-- Hearth stone -->
+      <rect x="60" y="230" width="220" height="20" rx="3" fill="#1e1208"/>
+      <rect x="50" y="245" width="240" height="14" rx="2" fill="#2c1f14"/>
+      <!-- Fireplace opening -->
+      <rect x="90" y="140" width="160" height="90" rx="4 4 0 0" fill="#0a0805"/>
+      <!-- Arch top -->
+      <path d="M90,165 Q90,140 170,140 Q250,140 250,165" fill="#1a1008"/>
+      <!-- Logs -->
+      <ellipse cx="140" cy="228" rx="35" ry="8" fill="#1a0e06"/>
+      <ellipse cx="200" cy="228" rx="30" ry="7" fill="#1a0e06"/>
+      <!-- Fire flames -->
+      <g style="animation:flameDance 1.2s ease-in-out infinite alternate">
+        <path d="M155,228 Q145,200 155,175 Q165,155 150,140 Q165,155 175,170 Q185,155 170,135 Q185,150 190,170 Q200,185 185,228 Z" fill="rgba(230,100,20,0.9)"/>
+      </g>
+      <g style="animation:flameDance 1.4s ease-in-out 0.3s infinite alternate">
+        <path d="M148,228 Q140,210 148,185 Q156,168 143,155 Q158,168 165,185 Q172,168 162,150 Q172,163 176,182 Q182,200 170,228 Z" fill="rgba(250,140,30,0.85)"/>
+      </g>
+      <g style="animation:flameDance 1s ease-in-out 0.6s infinite alternate">
+        <path d="M165,228 Q158,215 165,195 Q172,178 162,165 Q172,175 178,192 Q184,178 176,162 Q184,174 186,192 Q190,210 180,228 Z" fill="rgba(255,200,60,0.8)"/>
+      </g>
+      <!-- Embers glow -->
+      <ellipse cx="170" cy="228" rx="60" ry="10" fill="url(#fireGlow)"/>
+      <!-- Surrounding glow on floor -->
+      <ellipse cx="170" cy="255" rx="110" ry="20" fill="rgba(200,100,20,0.1)"/>
+      <!-- Mantle -->
+      <rect x="70" y="128" width="200" height="14" rx="2" fill="#251710"/>
+      <!-- Side walls -->
+      <rect x="60" y="135" width="32" height="96" rx="2" fill="#1e1208"/>
+      <rect x="248" y="135" width="32" height="96" rx="2" fill="#1e1208"/>
+    </svg>
+  </div>
+
+  <p class="section-label center" data-reveal>warmth in the cold</p>
+  <h2 class="section-heading center" data-reveal>
+    The Fire We Keep
+  </h2>
+  <div class="divider-leaf center" data-reveal><span>🔥</span></div>
+  <p class="prose center" data-reveal>
+    Outside the rain falls without mercy.<br>
+    Inside, the fire asks for nothing but wood<br>
+    and gives back everything — warmth, light,<br>
+    and the colour of your face in its glow.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 6 — THE PROMISE
+══════════════════════════════════════ -->
+<section id="promise">
+
+  <p class="promise-text" data-reveal>
+    "Someday we will find that forest.<br>
+    We will build that home from wood and rain<br>
+    and everything we feel for each other.<br>
+    And we will never need the world again."
+  </p>
+
+  <p class="promise-names" data-reveal>
+    Muhib &amp; Sara
+  </p>
+
+  <div class="divider-leaf center" data-reveal style="margin-top:2rem"><span>🌿</span></div>
+
+  <p class="rain-sound-note" data-reveal>
+    Close your eyes. Listen.<br>
+    That is the sound of rain on our roof.<br>
+    That is the sound of home.
+  </p>
+
+  <div style="margin-top:4rem;opacity:0;transition:opacity 0.8s ease 0.6s" data-reveal-btn>
+    <button type="button"
+      onclick="window.scrollTo({top:0,behavior:'smooth'})"
+      style="
+        font-family:'Cormorant Garamond',serif;
+        font-style:italic;
+        font-size:1rem;
+        color:var(--sage);
+        border:1px solid rgba(107,143,107,0.35);
+        background:transparent;
+        padding:0.85rem 2.4rem;
+        border-radius:40px;
+        cursor:pointer;
+        letter-spacing:0.18em;
+        transition:all 0.4s ease;
+        position:relative;z-index:2;
+      "
+      onmouseover="this.style.background='rgba(107,143,107,0.08)';this.style.borderColor='rgba(107,143,107,0.6)';this.style.boxShadow='0 0 24px rgba(107,143,107,0.2)'"
+      onmouseout="this.style.background='transparent';this.style.borderColor='rgba(107,143,107,0.35)';this.style.boxShadow='none'"
+    >↑ &nbsp; Return to our forest</button>
+  </div>
+
+</section>
+
+<style>
+@keyframes smokeUp{
+  0%{transform:translateY(0) scale(1);opacity:0.2}
+  100%{transform:translateY(-30px) scale(1.4);opacity:0}
+}
+@keyframes flameDance{
+  0%{transform:scaleX(1) scaleY(1) translateX(0)}
+  100%{transform:scaleX(1.06) scaleY(0.96) translateX(2px)}
+}
+</style>
+
+<script>
+/* ══════════════════════════════════════
+   FULL-PAGE RAIN
+══════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('rainCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, drops = [];
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function spawnDrop(){
+    return {
+      x:  Math.random() * W,
+      y:  Math.random() * H - H,
+      len: Math.random() * 18 + 8,
+      spd: Math.random() * 8 + 10,
+      a:  Math.random() * 0.35 + 0.1
+    };
+  }
+
+  for(let i=0;i<220;i++) drops.push(spawnDrop());
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle = 'rgba(160,200,175,0.55)';
+    ctx.lineWidth = 0.8;
+    drops.forEach(d=>{
+      ctx.beginPath();
+      ctx.globalAlpha = d.a;
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x - d.len*0.15, d.y + d.len);
+      ctx.stroke();
+      d.y += d.spd;
+      d.x -= d.spd * 0.15;
+      if(d.y > H + 20 || d.x < -20){
+        Object.assign(d, spawnDrop());
+        d.y = -20;
+      }
+    });
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  draw();
+})();
+
+/* ══════════════════════════════════════
+   WINDOW RAIN (inside the window frame)
+══════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('windowRain');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, drops=[];
+
+  function resize(){
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width  = rect.width  || 400;
+    H = canvas.height = rect.height || 533;
+  }
+
+  function spawnDrop(){
+    return{
+      x: Math.random()*W, y:-10,
+      len: Math.random()*12+6,
+      spd: Math.random()*5+7,
+      a: Math.random()*0.4+0.15
+    };
+  }
+
+  for(let i=0;i<60;i++) drops.push({...spawnDrop(), y:Math.random()*H});
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    drops.forEach(d=>{
+      ctx.beginPath();
+      ctx.strokeStyle=`rgba(160,200,175,${d.a})`;
+      ctx.lineWidth=0.8;
+      ctx.moveTo(d.x,d.y);
+      ctx.lineTo(d.x-d.len*0.12,d.y+d.len);
+      ctx.stroke();
+      d.y+=d.spd;
+      d.x-=d.spd*0.12;
+      if(d.y>H+10){Object.assign(d,spawnDrop());}
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  setTimeout(resize,300);
+  window.addEventListener('resize',resize);
+  draw();
+})();
+
+/* ══════════════════════════════════════
+   INTERSECTION OBSERVER — reveals
+══════════════════════════════════════ */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('vis');
+    }
+  });
+},{threshold:0.15});
+
+document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
+
+// Cards
+const cardIO = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('vis');
+  });
+},{threshold:0.1});
+
+document.querySelectorAll('[data-reveal-card]').forEach(el=>cardIO.observe(el));
+
+// Btn
+const btnIO = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.style.opacity='1';
+  });
+},{threshold:0.3});
+document.querySelectorAll('[data-reveal-btn]').forEach(el=>btnIO.observe(el));
+</script>
+</body>
+</html>
